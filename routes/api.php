@@ -5,15 +5,21 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| Guests can access (user not logged in)
 |--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => 'guest'], function () {
+    Route::post('login', 'Api\LoginController@login');
+    Route::post('register', 'Api\RegisterController@register');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Authenticated users can access (user logged in)
+|--------------------------------------------------------------------------
+*/
+
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::get('users/{user}', 'Api\UserController@show');
 });
