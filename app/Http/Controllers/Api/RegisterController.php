@@ -17,7 +17,7 @@ class RegisterController extends Controller
 
         $user = User::create([
             'email' => $attributes['email'],
-            'password' => $attributes['password']
+            'password' => bcrypt($attributes['password'])
         ]);
 
         $token = $user->createToken('TutsForWeb')->accessToken;
